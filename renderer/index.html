@@ -3,15 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OpaNews - Nachrichten-Aggregator</title>
+    <title>news</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <header class="topbar">
       <div class="brand">
         <span class="logo">📰</span>
-        <h1>OpaNews</h1>
-        <span class="tag">lokaler Nachrichten-Aggregator</span>
+        <h1>news</h1>
+        <span class="tag">Deutschland & lokale News</span>
+        <span id="geoTag" class="geo-tag hidden" title="Standort via IP-Geolokalisierung"></span>
       </div>
       <div class="controls">
         <input
@@ -20,10 +21,23 @@
           placeholder="Suche in Schlagzeilen..."
           autocomplete="off"
         />
-        <select id="sourceFilter">
+        <select id="catFilter" title="Kategorie">
+          <option value="all">Alle Kategorien</option>
+          <option value="lokal">Lokal (dein Ort)</option>
+          <option value="allgemein">Allgemein</option>
+          <option value="regional">Regional / ÖR</option>
+          <option value="tech">Tech</option>
+          <option value="wirtschaft">Wirtschaft</option>
+        </select>
+        <select id="sourceFilter" title="Quelle">
           <option value="all">Alle Quellen</option>
         </select>
-        <button id="refresh" title="Aktualisieren">↻ Aktualisieren</button>
+        <select id="moodFilter" title="Stimmung">
+          <option value="positiveFirst">😊 Gute Laune zuerst</option>
+          <option value="onlyPositive">🌞 Nur gute Nachrichten</option>
+          <option value="date">🕒 Nach Datum</option>
+        </select>
+        <button id="refresh" title="Aktualisieren">↻</button>
         <button id="toggleView" title="Ansicht wechseln">⊞ Karten</button>
         <button id="toggleTheme" title="Theme wechseln">☾</button>
       </div>
@@ -38,8 +52,8 @@
       </div>
       <footer class="sidebar-footer">
         <small
-          >Daten via öffentlichen RSS-Feeds. Klick auf Artikel öffnet
-          Original-Quelle.</small
+          >Lokale Quellen werden anhand des Standorts priorisiert.
+          KI-Zusammenfassungen entstehen erst nach Klick.</small
         >
       </footer>
     </aside>
@@ -54,6 +68,20 @@
       </div>
       <div id="feed" class="feed cards"></div>
     </main>
+
+    <!-- Summary modal -->
+    <div id="summaryModal" class="modal hidden">
+      <div class="modal-card">
+        <header class="modal-head">
+          <div>
+            <h2 id="summaryTitle">Zusammenfassung</h2>
+            <p id="summarySource" class="modal-source"></p>
+          </div>
+          <button id="closeSummary" title="Schließen">✕</button>
+        </header>
+        <div id="summaryBody" class="modal-body"></div>
+      </div>
+    </div>
 
     <script src="app.js"></script>
   </body>

@@ -1,5 +1,5 @@
 {
-  "name": "opa-news",
+  "name": "news",
   "version": "1.0.0",
   "description": "Lokaler Nachrichten-Aggregator - sammelt News aus mehreren deutschen Quellen via RSS",
   "main": "main.js",
@@ -26,8 +26,8 @@
     "electron-builder": "^25.1.8"
   },
   "build": {
-    "appId": "com.opanews.app",
-    "productName": "OpaNews",
+    "appId": "com.news.app",
+    "productName": "news",
     "directories": {
       "output": "dist"
     },

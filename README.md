@@ -1,4 +1,4 @@
-# OpaNews
+# news
 
 Lokaler Nachrichten-Aggregator als Windows-Desktop-App (Electron). Sammelt Schlagzeilen aus mehreren öffentlichen deutschen RSS-Feeds und zeigt sie in einer einzigen, durchsuchbaren Oberfläche.
 
@@ -37,8 +37,8 @@ npm run build:win
 
 Die fertigen Installer landen in `dist/`:
 
-- `OpaNews-1.0.0-x64.exe` – NSIS-Installer
-- `OpaNews-1.0.0-x64.exe` (portable) – Single-File-Variante ohne Installation
+- `news-1.0.0-x64.exe` – NSIS-Installer
+- `news-1.0.0-x64.exe` (portable) – Single-File-Variante ohne Installation
 
 ## Build für macOS / Linux
 
