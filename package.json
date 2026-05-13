@@ -4,7 +4,7 @@
   "description": "Lokaler Nachrichten-Aggregator - sammelt News aus mehreren deutschen Quellen via RSS",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "start": "cross-env ELECTRON_RUN_AS_NODE= electron .",
     "build": "electron-builder",
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
@@ -21,6 +21,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "electron": "^33.0.0",
     "electron-builder": "^25.1.8"
   },
@@ -40,11 +41,15 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         },
         {
           "target": "portable",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "artifactName": "${productName}-${version}-${arch}.${ext}"
