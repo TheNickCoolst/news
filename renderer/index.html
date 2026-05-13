@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpaNews - Nachrichten-Aggregator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">📰</span>
+        <h1>OpaNews</h1>
+        <span class="tag">lokaler Nachrichten-Aggregator</span>
+      </div>
+      <div class="controls">
+        <input
+          type="search"
+          id="search"
+          placeholder="Suche in Schlagzeilen..."
+          autocomplete="off"
+        />
+        <select id="sourceFilter">
+          <option value="all">Alle Quellen</option>
+        </select>
+        <button id="refresh" title="Aktualisieren">↻ Aktualisieren</button>
+        <button id="toggleView" title="Ansicht wechseln">⊞ Karten</button>
+        <button id="toggleTheme" title="Theme wechseln">☾</button>
+      </div>
+    </header>
+
+    <aside class="sidebar">
+      <h2>Quellen</h2>
+      <ul id="sourceList"></ul>
+      <div class="status">
+        <div id="lastUpdate">noch nicht geladen</div>
+        <div id="itemCount">0 Meldungen</div>
+      </div>
+      <footer class="sidebar-footer">
+        <small
+          >Daten via öffentlichen RSS-Feeds. Klick auf Artikel öffnet
+          Original-Quelle.</small
+        >
+      </footer>
+    </aside>
+
+    <main class="content">
+      <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Lade Nachrichten...</p>
+      </div>
+      <div id="empty" class="empty hidden">
+        <p>Keine Nachrichten gefunden.</p>
+      </div>
+      <div id="feed" class="feed cards"></div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
