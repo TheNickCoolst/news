@@ -1,7 +1,7 @@
 {
   "name": "news",
-  "version": "1.0.0",
-  "description": "Lokaler Nachrichten-Aggregator - sammelt News aus mehreren deutschen Quellen via RSS",
+  "version": "2.0.0",
+  "description": "dahamm – Nachrichten aus Mittelfranken. Lokaler RSS-Reader für deinen Ort, die Region und die Welt",
   "main": "main.js",
   "scripts": {
     "start": "cross-env ELECTRON_RUN_AS_NODE= electron .",
@@ -9,12 +9,15 @@
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
     "build:linux": "electron-builder --linux",
-    "dist": "electron-builder --win --x64"
+    "dist": "electron-builder --win --x64",
+    "test": "node tests/personalization.cjs && node tests/region.cjs"
   },
   "keywords": [
     "news",
     "rss",
-    "aggregator",
+    "mittelfranken",
+    "nürnberg",
+    "franken",
     "electron",
     "deutsch"
   ],
@@ -27,7 +30,7 @@
   },
   "build": {
     "appId": "com.news.app",
-    "productName": "news",
+    "productName": "dahamm",
     "directories": {
       "output": "dist"
     },

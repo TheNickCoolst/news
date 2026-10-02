@@ -1,71 +1,54 @@
-# news
+# dahamm – Nachrichten aus Mittelfranken
 
-Lokaler Nachrichten-Aggregator als Windows-Desktop-App (Electron). Sammelt Schlagzeilen aus mehreren öffentlichen deutschen RSS-Feeds und zeigt sie in einer einzigen, durchsuchbaren Oberfläche.
+Desktop-App (Electron) für lokale Nachrichten: zuerst dein Ort, dann Mittelfranken, Bayern und die Welt. Alles aus öffentlichen RSS-/Atom-Feeds, in einer Oberfläche im Stil einer Tageszeitung.
 
-> Hinweis: Es werden **keine** Webseiten gescraped. Die App nutzt ausschließlich die offiziellen, öffentlich angebotenen RSS-/Atom-Feeds der jeweiligen Anbieter. Klick auf einen Artikel öffnet die Original-URL im Standard-Browser.
+> Hinweis: Es werden **keine** Webseiten gescraped. Die App nutzt die öffentlich angebotenen RSS-/Atom-Feeds der Anbieter und Google-News-Suchfeeds. Ein Klick auf eine Meldung öffnet das Original im Standard-Browser.
 
 ## Features
 
-- Aggregiert ~10 deutsche Nachrichtenquellen (Tagesschau, Spiegel, ZEIT, Heise, SZ, n-tv, Welt, FAZ, Tagesspiegel, Deutsche Welle)
-- Karten- und Listen-Ansicht
-- Volltextsuche über alle Schlagzeilen
-- Filter nach Quelle
-- Dark / Light Theme
+- **Mein Ort:** über 40 Orte in Mittelfranken (kreisfreie Städte und alle sieben Landkreise), dazu freie Eingabe für jeden anderen Ort
+- **Startseite wie eine Zeitung:** Aufmacher, „Top in der Region“, Rubriken für Ort, Mittelfranken, Blaulicht, Sport, Bayern, Deutschland & Welt, Wirtschaft, Technik
+- Regionale Quellen: nordbayern.de (Nürnberg, Fürth, Erlangen, Franken, Polizeiberichte, 1. FC Nürnberg), N-Land, Franken Fernsehen, BR/tagesschau Bayern, SZ Bayern, Merkur Bayern, Google News für Ort, Landkreis, Greuther Fürth und Ice Tigers
+- Personalisierung: Themen, Stichwörter und „Mehr/Weniger davon“ pro Quelle, nur lokal gespeichert
+- „Gute Nachrichten“-Modus, Suche (Strg + K), Karten- und Listenansicht, Hell/Dunkel
+- Lokale Kurzfassungen (extraktiv, ohne Cloud)
 - Auto-Refresh alle 10 Minuten
-- Komplett offline lauffähig (außer beim Feed-Update)
 - Windows-Installer (NSIS) + portable EXE
 
 ## Quellen
 
-Alle Feeds sind öffentlich erreichbar und in `renderer/app.js` konfigurierbar. Neue Quelle hinzufügen: einfach Eintrag im `SOURCES`-Array ergänzen.
+Feste Feeds stehen in `BASE_SOURCES` in `renderer/app.js`. Orte, Landkreise und Suchbegriffe stehen in `renderer/region.js`.
 
 ## Entwicklung
 
 ```bash
 npm install
 npm start
+npm test
 ```
 
 ## Build für Windows
-
-Vom Mac/Linux/Windows aus:
 
 ```bash
 npm install
 npm run build:win
 ```
 
-Die fertigen Installer landen in `dist/`:
-
-- `news-1.0.0-x64.exe` – NSIS-Installer
-- `news-1.0.0-x64.exe` (portable) – Single-File-Variante ohne Installation
-
-## Build für macOS / Linux
-
-```bash
-npm run build:mac
-npm run build:linux
-```
-
-## Tech Stack
-
-- Electron 33
-- electron-builder
-- Vanilla JS / HTML / CSS (keine Frameworks, kein Build-Step für den Renderer)
-- DOMParser für RSS/Atom/RDF
+Die Installer landen in `dist/` (`dahamm-2.0.0-x64.exe`, NSIS und portable).
 
 ## Architektur
 
 ```
-main.js          Electron-Hauptprozess, RSS-Fetch über Node (umgeht CORS)
-preload.js       Bridge mit contextIsolation
+main.js                  Electron-Hauptprozess: Feed-Abruf (Zeichensatz-Erkennung), Standort-Hinweis, externe Links
+preload.js               schmale Bridge mit contextIsolation
 renderer/
-  index.html     Layout (Topbar / Sidebar / Content-Grid)
-  style.css      Theme-Variablen, Dark/Light
-  app.js         Feed-Parser, State, Rendering
+  index.html             Layout: Navigationsleiste, Werkzeugleiste, Startseite, Rubrik-Ansicht, Dialoge
+  style.css              Design-Tokens (Hell/Dunkel), Zeitungs-Typografie
+  app.js                 Quellen, Parser, Ranking, Rendering, Kurzfassungen
+  region.js              Mittelfranken: Orte, Landkreise, Textabgleich
+  personalization.js     Interessen-Profil (lokal)
+tests/                   Node-Tests ohne Framework
 ```
-
-Der Fetch läuft im Main-Prozess (Node `https`), weil viele RSS-Feeds keine `Access-Control-Allow-Origin`-Header setzen.
 
 ## Lizenz
 
@@ -73,4 +56,4 @@ MIT – siehe `LICENSE`.
 
 ## Disclaimer
 
-Diese App stellt nur Links zu fremden Inhalten dar. Die Rechte an den Schlagzeilen und Artikeln liegen bei den jeweiligen Verlagen. Wer einen Artikel liest, landet auf der Original-Seite des Anbieters.
+Diese App stellt nur Links zu fremden Inhalten dar. Die Rechte an Schlagzeilen und Artikeln liegen bei den jeweiligen Verlagen.

@@ -2,87 +2,225 @@
 <html lang="de">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https: http: data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>news</title>
+    <meta name="color-scheme" content="light dark" />
+    <title>dahamm – Nachrichten aus Mittelfranken</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="topbar">
-      <div class="brand">
-        <span class="logo">📰</span>
-        <h1>news</h1>
-        <span class="tag">Deutschland & lokale News</span>
-        <span id="geoTag" class="geo-tag hidden" title="Standort via IP-Geolokalisierung"></span>
-      </div>
-      <div class="controls">
-        <input
-          type="search"
-          id="search"
-          placeholder="Suche in Schlagzeilen..."
-          autocomplete="off"
-        />
-        <select id="catFilter" title="Kategorie">
-          <option value="all">Alle Kategorien</option>
-          <option value="lokal">Lokal (dein Ort)</option>
-          <option value="allgemein">Allgemein</option>
-          <option value="regional">Regional / ÖR</option>
-          <option value="tech">Tech</option>
-          <option value="wirtschaft">Wirtschaft</option>
-        </select>
-        <select id="sourceFilter" title="Quelle">
-          <option value="all">Alle Quellen</option>
-        </select>
-        <select id="moodFilter" title="Stimmung">
-          <option value="positiveFirst">😊 Gute Laune zuerst</option>
-          <option value="onlyPositive">🌞 Nur gute Nachrichten</option>
-          <option value="date">🕒 Nach Datum</option>
-        </select>
-        <button id="refresh" title="Aktualisieren">↻</button>
-        <button id="toggleView" title="Ansicht wechseln">⊞ Karten</button>
-        <button id="toggleTheme" title="Theme wechseln">☾</button>
-      </div>
-    </header>
+    <svg class="sprite" aria-hidden="true" focusable="false">
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" /><path d="m16 16 4.5 4.5" /></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.34-5.66" /><path d="M20 4v5h-5" /></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4" /></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z" /></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" /><circle cx="15" cy="7" r="2" /><circle cx="9" cy="17" r="2" /></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7" /><path d="M6 9.5V20h12V9.5" /></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.7-6.5-11a6.5 6.5 0 0 1 13 0c0 5.3-6.5 11-6.5 11Z" /><circle cx="12" cy="10" r="2.3" /></symbol>
+      <symbol id="i-region" viewBox="0 0 24 24"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Z" /><path d="M9 4v14M15 6v14" /></symbol>
+      <symbol id="i-siren" viewBox="0 0 24 24"><path d="M7 18v-5.5a5 5 0 0 1 10 0V18" /><path d="M5 18h14v2.5H5z" /><path d="M12 2.5v2M4.5 6l1.4 1.4M19.5 6l-1.4 1.4" /></symbol>
+      <symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" /><path d="m12 8 3.3 2.4-1.3 3.9h-4l-1.3-3.9L12 8ZM12 8V3.5M15.3 10.4l4.4-1.3M14 14.3l2.7 3.8M10 14.3l-2.7 3.8M8.7 10.4 4.3 9.1" /></symbol>
+      <symbol id="i-mountain" viewBox="0 0 24 24"><path d="m2.5 19.5 6.5-11 4 6.5 2.5-3.5 6 8Z" /><path d="m7.2 11.3 1.8 1.2 1.6-1.4" /></symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" /><path d="M3.5 12h17M12 3.5c2.4 2.4 3.5 5.2 3.5 8.5s-1.1 6.1-3.5 8.5c-2.4-2.4-3.5-5.2-3.5-8.5S9.6 5.9 12 3.5Z" /></symbol>
+      <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16" /><path d="M7 16v-4M12 16V7M17 16v-6" /></symbol>
+      <symbol id="i-chip" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2" /><path d="M10 3.5V7M14 3.5V7M10 17v3.5M14 17v3.5M3.5 10H7M3.5 14H7M17 10h3.5M17 14h3.5" /></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5" /><rect x="13" y="4" width="7" height="7" rx="1.5" /><rect x="4" y="13" width="7" height="7" rx="1.5" /><rect x="13" y="13" width="7" height="7" rx="1.5" /></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11" /><path d="M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" stroke-width="2.6" /></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-8.5 8.5" /><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="m11 3.5 1.9 5.1L18 10.5l-5.1 1.9L11 17.5l-1.9-5.1L4 10.5l5.1-1.9L11 3.5Z" /><path d="m18.5 15 .8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z" /></symbol>
+      <symbol id="i-thumb" viewBox="0 0 24 24"><path d="M7 11v9H4v-9h3Z" /><path d="m7 11 4-7a2 2 0 0 1 2.6 2.4L12.8 10H19a2 2 0 0 1 2 2.3l-1.2 6.1A2 2 0 0 1 17.8 20H7" /></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5v5.5M12 16.5h.01" /></symbol>
+      <symbol id="i-rake" viewBox="0 0 32 32">
+        <rect width="32" height="32" rx="9" style="fill: var(--rake-red, #c8102e)" />
+        <path d="M0 20.5 5.33 10l5.34 10.5L16 10l5.33 10.5L26.67 10 32 20.5V23a9 9 0 0 1-9 9H9a9 9 0 0 1-9-9Z" style="fill: var(--rake-white, #fff)" />
+      </symbol>
+    </svg>
 
-    <aside class="sidebar">
-      <h2>Quellen</h2>
-      <ul id="sourceList"></ul>
-      <div class="status">
-        <div id="lastUpdate">noch nicht geladen</div>
-        <div id="itemCount">0 Meldungen</div>
-      </div>
-      <footer class="sidebar-footer">
-        <small
-          >Lokale Quellen werden anhand des Standorts priorisiert.
-          KI-Zusammenfassungen entstehen erst nach Klick.</small
-        >
-      </footer>
-    </aside>
-
-    <main class="content">
-      <div id="loading" class="loading hidden">
-        <div class="spinner"></div>
-        <p>Lade Nachrichten...</p>
-      </div>
-      <div id="empty" class="empty hidden">
-        <p>Keine Nachrichten gefunden.</p>
-      </div>
-      <div id="feed" class="feed cards"></div>
-    </main>
-
-    <!-- Summary modal -->
-    <div id="summaryModal" class="modal hidden">
-      <div class="modal-card">
-        <header class="modal-head">
-          <div>
-            <h2 id="summaryTitle">Zusammenfassung</h2>
-            <p id="summarySource" class="modal-source"></p>
+    <div class="app">
+      <aside class="rail" aria-label="Navigation">
+        <div class="brand">
+          <svg class="brand-mark" aria-hidden="true"><use href="#i-rake" /></svg>
+          <div class="brand-text">
+            <span class="brand-name">dahamm</span>
+            <span class="brand-sub">Nachrichten aus Mittelfranken</span>
           </div>
-          <button id="closeSummary" title="Schließen">✕</button>
+        </div>
+
+        <button id="placeButton" class="place-button" type="button" title="Ort ändern">
+          <svg class="icon" aria-hidden="true"><use href="#i-pin" /></svg>
+          <span class="place-text">
+            <small>Mein Ort</small>
+            <strong id="placeName">Nürnberg</strong>
+          </span>
+          <span class="place-edit">ändern</span>
+        </button>
+
+        <nav id="sectionNav" class="nav" aria-label="Rubriken"></nav>
+
+        <details id="sourcesPanel" class="sources">
+          <summary>
+            <span>Quellen</span>
+            <span id="sourceHealth" class="sources-health"></span>
+          </summary>
+          <ul id="sourceList"></ul>
+        </details>
+
+        <div class="rail-foot">
+          <span id="lastUpdate">Noch nicht geladen</span>
+          <span id="itemCount"></span>
+        </div>
+      </aside>
+
+      <div class="main">
+        <header class="toolbar">
+          <label class="search">
+            <svg class="icon" aria-hidden="true"><use href="#i-search" /></svg>
+            <input
+              type="search"
+              id="search"
+              placeholder="In allen Meldungen suchen …"
+              aria-label="Meldungen durchsuchen"
+              autocomplete="off"
+            />
+            <kbd>Strg K</kbd>
+          </label>
+          <div class="toolbar-actions">
+            <button id="goodNews" class="good-toggle" type="button" aria-pressed="false" title="Nur Meldungen mit positiver Grundstimmung zeigen">
+              <svg class="icon" aria-hidden="true"><use href="#i-sun" /></svg>
+              <span>Gute Nachrichten</span>
+            </button>
+            <button id="openProfile" class="icon-button" type="button" title="Deine Interessen" aria-label="Deine Interessen">
+              <svg class="icon" aria-hidden="true"><use href="#i-sliders" /></svg>
+            </button>
+            <button id="toggleTheme" class="icon-button" type="button" title="Hell / Dunkel" aria-label="Farbschema wechseln">
+              <svg class="icon" aria-hidden="true"><use id="themeIcon" href="#i-moon" /></svg>
+            </button>
+            <button id="refresh" class="icon-button" type="button" title="Aktualisieren" aria-label="Nachrichten aktualisieren">
+              <svg class="icon" aria-hidden="true"><use href="#i-refresh" /></svg>
+            </button>
+          </div>
+          <div id="progress" class="progress" aria-hidden="true"><span></span></div>
         </header>
-        <div id="summaryBody" class="modal-body"></div>
+
+        <main id="content" class="content" tabindex="-1">
+          <section id="homeView" class="page home" aria-label="Überblick"></section>
+
+          <section id="listView" class="page listing" hidden>
+            <header class="listing-head">
+              <div>
+                <span id="listEyebrow" class="eyebrow"></span>
+                <h1 id="listTitle"></h1>
+                <p id="listCaption" class="muted"></p>
+              </div>
+              <div class="listing-controls">
+                <select id="sourceFilter" aria-label="Quelle"></select>
+                <div class="segmented" role="group" aria-label="Sortierung">
+                  <button type="button" data-sort="relevance" aria-pressed="true">Empfohlen</button>
+                  <button type="button" data-sort="date" aria-pressed="false">Neueste</button>
+                </div>
+                <div class="segmented" role="group" aria-label="Ansicht">
+                  <button type="button" data-view="cards" aria-pressed="true" title="Karten" aria-label="Kartenansicht">
+                    <svg class="icon" aria-hidden="true"><use href="#i-grid" /></svg>
+                  </button>
+                  <button type="button" data-view="list" aria-pressed="false" title="Liste" aria-label="Listenansicht">
+                    <svg class="icon" aria-hidden="true"><use href="#i-list" /></svg>
+                  </button>
+                </div>
+              </div>
+            </header>
+            <div id="feed" class="feed cards"></div>
+            <div id="empty" class="empty" hidden>
+              <svg class="icon" aria-hidden="true"><use href="#i-search" /></svg>
+              <p>Hier gibt’s gerade nichts zu lesen.</p>
+              <span class="muted">Ändere Suche oder Filter – oder schau später wieder vorbei.</span>
+              <button id="resetFilters" class="button" type="button">Filter zurücksetzen</button>
+            </div>
+            <button id="moreButton" class="more-button" type="button" hidden>Mehr anzeigen</button>
+          </section>
+        </main>
       </div>
     </div>
 
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <dialog id="placeDialog" class="dialog dialog-wide" aria-labelledby="placeTitle">
+      <div class="dialog-inner">
+        <header class="dialog-head">
+          <div>
+            <span class="eyebrow">Dein Ort</span>
+            <h2 id="placeTitle">Wo bist du dahamm?</h2>
+            <p class="muted">Wähle deinen Ort in Mittelfranken. Was dort passiert, steht bei dir ganz oben.</p>
+          </div>
+          <button class="icon-button" type="button" data-close aria-label="Schließen">
+            <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </header>
+        <div class="dialog-body">
+          <label class="search search-inline">
+            <svg class="icon" aria-hidden="true"><use href="#i-search" /></svg>
+            <input type="search" id="placeSearch" autofocus placeholder="Ort suchen, z. B. Zirndorf" aria-label="Ort suchen" autocomplete="off" />
+          </label>
+          <div id="placeSuggestion" class="suggestion" hidden></div>
+          <div id="placeGroups" class="place-groups"></div>
+          <div class="custom-place">
+            <label for="customPlace">Nicht dabei? Gib deinen Ort ein:</label>
+            <div class="row">
+              <input id="customPlace" maxlength="60" placeholder="z. B. Wilhermsdorf" autocomplete="off" />
+              <button id="useCustomPlace" class="button" type="button">Übernehmen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog id="profileDialog" class="dialog" aria-labelledby="profileTitle">
+      <div class="dialog-inner" tabindex="-1" autofocus>
+        <header class="dialog-head">
+          <div>
+            <span class="eyebrow">Personalisierung</span>
+            <h2 id="profileTitle">Deine Interessen</h2>
+            <p class="muted">Themen und Stichwörter bestimmen, was unter „Empfohlen“ und „Für dich“ weiter oben steht.</p>
+          </div>
+          <button class="icon-button" type="button" data-close aria-label="Schließen">
+            <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </header>
+        <div class="dialog-body">
+          <h3 class="field-label">Themen</h3>
+          <div id="interestChoices" class="chips" role="group" aria-label="Themen"></div>
+          <label class="field-label" for="keywords">Stichwörter <span class="muted">(mit Komma trennen, höchstens 10)</span></label>
+          <input id="keywords" class="text-input" maxlength="400" placeholder="z. B. Club, Kärwa, Straßenbahn, Erlangen" autocomplete="off" />
+          <p id="profileHint" class="muted small"></p>
+        </div>
+        <footer class="dialog-foot">
+          <button id="resetProfile" class="button ghost" type="button">Zurücksetzen</button>
+          <button class="button primary" type="button" data-close>Fertig</button>
+        </footer>
+      </div>
+    </dialog>
+
+    <dialog id="summaryDialog" class="dialog" aria-labelledby="summaryTitle">
+      <div class="dialog-inner" tabindex="-1" autofocus>
+        <header class="dialog-head">
+          <div>
+            <span id="summarySource" class="eyebrow"></span>
+            <h2 id="summaryTitle" class="serif">Kurzfassung</h2>
+          </div>
+          <button class="icon-button" type="button" data-close aria-label="Schließen">
+            <svg class="icon" aria-hidden="true"><use href="#i-close" /></svg>
+          </button>
+        </header>
+        <div id="summaryBody" class="dialog-body"></div>
+      </div>
+    </dialog>
+
+    <script src="personalization.js"></script>
+    <script src="region.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
