@@ -1,9 +1,22 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, nativeTheme } = require('electron');
 const path = require('path');
 const https = require('https');
 const http = require('http');
 
 let mainWindow;
+
+function isWebUrl(value) {
+  try {
+    const { protocol } = new URL(value);
+    return protocol === 'https:' || protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
+function openExternalSafe(url) {
+  if (isWebUrl(url)) shell.openExternal(url);
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -11,8 +24,8 @@ function createWindow() {
     height: 900,
     minWidth: 900,
     minHeight: 600,
-    title: 'news',
-    backgroundColor: '#1a1a1a',
+    title: 'dahamm',
+    backgroundColor: nativeTheme.shouldUseDarkColors ? '#151311' : '#f7f3ec',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -26,17 +39,41 @@ function createWindow() {
 
   // External links open in default browser, not inside the Electron window
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    shell.openExternal(url);
+    openExternalSafe(url);
     return { action: 'deny' };
+  });
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    if (url === mainWindow.webContents.getURL()) return;
+    event.preventDefault();
+    openExternalSafe(url);
   });
 }
 
 const zlib = require('zlib');
 
+// Feeds such as Golem are ISO-8859-1; honour the declared charset.
+function decodeBody(buffer, contentType) {
+  const head = buffer.subarray(0, 1024).toString('latin1');
+  const charset = (
+    /charset=["']?([\w-]+)/i.exec(contentType || '')?.[1] ||
+    /<\?xml[^>]*encoding=["']([\w-]+)/i.exec(head)?.[1] ||
+    /<meta[^>]+charset=["']?([\w-]+)/i.exec(head)?.[1] ||
+    'utf-8'
+  ).toLowerCase();
+  try {
+    return new TextDecoder(charset).decode(buffer);
+  } catch {
+    return buffer.toString('utf8');
+  }
+}
+
 function fetchUrl(url, redirects = 5) {
   return new Promise((resolve, reject) => {
     if (redirects < 0) {
       return reject(new Error('Too many redirects'));
+    }
+    if (!isWebUrl(url)) {
+      return reject(new Error('Unsupported URL'));
     }
     const lib = url.startsWith('https') ? https : http;
     const req = lib.get(
@@ -75,7 +112,7 @@ function fetchUrl(url, redirects = 5) {
 
         const chunks = [];
         stream.on('data', (c) => chunks.push(c));
-        stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+        stream.on('end', () => resolve(decodeBody(Buffer.concat(chunks), res.headers['content-type'])));
         stream.on('error', reject);
       }
     );
@@ -96,33 +133,50 @@ ipcMain.handle('fetch-feed', async (_event, url) => {
 });
 
 ipcMain.handle('open-external', async (_event, url) => {
+  if (!isWebUrl(url)) return false;
   await shell.openExternal(url);
   return true;
 });
+
+// IP lookup is only a hint for the first-run place picker.
+const GEO_PROVIDERS = [
+  {
+    url: 'https://get.geojs.io/v1/ip/geo.json',
+    map: (data) => ({
+      city: data.city || null,
+      region: data.region || null,
+      country: data.country || null,
+      countryCode: String(data.country_code || '').toUpperCase(),
+    }),
+  },
+  {
+    url: 'https://ipwho.is/',
+    map: (data) => {
+      if (data.success === false) throw new Error(data.message || 'geo lookup failed');
+      return {
+        city: data.city || null,
+        region: data.region || null,
+        country: data.country || null,
+        countryCode: String(data.country_code || '').toUpperCase(),
+      };
+    },
+  },
+];
 
 let geoCache = null;
 
 ipcMain.handle('get-geo', async () => {
   if (geoCache) return { ok: true, geo: geoCache };
-  try {
-    const raw = await fetchUrl('https://ipapi.co/json/');
-    const data = JSON.parse(raw);
-    if (data.error) throw new Error(data.reason || 'geo lookup failed');
-    geoCache = {
-      city: data.city || null,
-      region: data.region || null,
-      country: data.country_name || null,
-      countryCode: (data.country_code || data.country || '').toUpperCase(),
-      languages: (data.languages || '').split(',')[0] || null,
-      latitude: data.latitude || null,
-      longitude: data.longitude || null,
-      timezone: data.timezone || null,
-      ip: data.ip || null,
-    };
-    return { ok: true, geo: geoCache };
-  } catch (err) {
-    return { ok: false, error: err.message };
+  let lastError = 'geo lookup failed';
+  for (const provider of GEO_PROVIDERS) {
+    try {
+      geoCache = provider.map(JSON.parse(await fetchUrl(provider.url)));
+      return { ok: true, geo: geoCache };
+    } catch (err) {
+      lastError = err.message;
+    }
   }
+  return { ok: false, error: lastError };
 });
 
 app.whenReady().then(createWindow);
