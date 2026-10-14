@@ -4,7 +4,7 @@
 
 This repository contains `dahamm` (package name `news`), an Electron desktop reader for public RSS/Atom feeds focused on Mittelfranken, using vanilla JavaScript, HTML, and CSS.
 
-- `main.js`: window lifecycle, network requests, geolocation, and IPC handlers.
+- `main.js`: window lifecycle, network requests, geolocation, Claude summaries, and IPC handlers.
 - `preload.js`: the restricted `window.news` bridge between processes.
 - `renderer/app.js`: feed sources, parsing, ranking, state, summaries, and rendering. Add standard feeds to `BASE_SOURCES`.
 - `renderer/region.js`: Mittelfranken places, districts, Google News queries, and place matching.
@@ -43,3 +43,5 @@ Follow existing `feat:` and `fix:` prefixes, using short imperative subjects. Ke
 ## Security & Configuration
 
 Preserve `contextIsolation: true` and `nodeIntegration: false`. Expose narrow IPC methods through `preload.js`; validate external URLs and treat feed content as untrusted. Never commit credentials or generated installers.
+
+`ANTHROPIC_API_KEY` is read from `.env` (gitignored, template in `.env.example`) by the main process only. Never pass it to the renderer or add `.env` to the packaged `files`. Without a key, summaries stay local.

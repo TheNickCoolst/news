@@ -107,6 +107,7 @@ const state = {
   geoSuggestion: null,
   registry: [],
   profile: Personalization.load(),
+  ai: { available: false, model: '' },
 };
 
 // ───────────────────────────────────────────────────────────────
@@ -1246,13 +1247,27 @@ async function createSummary(article) {
   if (!baseText || baseText.length < 50) return null;
 
   const result = {
-    summary: summarize(baseText, 4),
+    summary: '',
     fetchedFull,
     sourceLength: baseText.length,
     createdAt: Date.now(),
   };
-  summaryCache[article.link] = result;
-  saveSummaryCache();
+  if (state.ai.available) {
+    const res = await api.summarizeAi({ title: article.title, text: baseText });
+    if (res.ok && !res.summary) return null;
+    if (res.ok) {
+      result.summary = res.summary;
+      result.model = res.model;
+    } else {
+      result.aiError = res.error;
+    }
+  }
+  result.summary ||= summarize(baseText, 4);
+  // A local fallback is not cached, so the next attempt asks Claude again.
+  if (!result.aiError) {
+    summaryCache[article.link] = result;
+    saveSummaryCache();
+  }
   return result;
 }
 
@@ -1261,8 +1276,11 @@ async function openSummary(article, trigger = null) {
   summaryArticle = article;
   dom.summaryTitle.textContent = article.title;
   dom.summarySource.textContent = [article.publisher, relativeTime(article.date)].filter(Boolean).join(' · ');
+  const where = state.ai.available
+    ? `Der Text dieser Meldung geht zur Auswertung an ${state.ai.model} (Anthropic).`
+    : 'Nur diese Meldung wird lokal auf deinem Gerät ausgewertet.';
   dom.summaryBody.innerHTML = `<div class="summary-loading" aria-live="polite">${icon('sparkle')}
-    <div><strong>Kurzfassung wird erstellt …</strong><p class="muted">Nur diese Meldung wird lokal auf deinem Gerät ausgewertet.</p></div></div>`;
+    <div><strong>Kurzfassung wird erstellt …</strong><p class="muted">${escapeHtml(where)}</p></div></div>`;
   if (!dom.summaryDialog.open) dom.summaryDialog.showModal();
   if (trigger) {
     trigger.classList.add('summarizing');
@@ -1288,9 +1306,9 @@ function showSummary(result, article, justGenerated) {
       <div class="summary-actions">${openButton}</div>`;
     return;
   }
-  const meta = result.fetchedFull
-    ? `Lokal erstellt aus dem Volltext (${result.sourceLength} Zeichen)`
-    : `Lokal erstellt aus der Feed-Beschreibung (${result.sourceLength} Zeichen)`;
+  const origin = result.fetchedFull ? 'dem Volltext' : 'der Feed-Beschreibung';
+  const meta = `${result.model ? `Von ${result.model} erstellt` : 'Lokal erstellt'} aus ${origin} (${result.sourceLength} Zeichen)`
+    + (result.aiError ? `, Claude nicht verfügbar: ${result.aiError}` : '');
   const age = justGenerated ? 'gerade eben' : `aus dem Zwischenspeicher, ${relativeTime(new Date(result.createdAt))}`;
   dom.summaryBody.innerHTML = `
     <p class="summary-text">${escapeHtml(result.summary)}</p>
@@ -1604,6 +1622,9 @@ function initEvents() {
 
 bindDom();
 state.sources = buildSources(state.place);
+api.aiStatus().then((status) => {
+  state.ai = status;
+});
 initEvents();
 renderAll();
 loadAll();
