@@ -601,15 +601,19 @@ function rebuildArticles() {
     if (!entry) return;
     state.sourceStats[source.id] = { count: entry.items.length, error: entry.error };
     entry.items.forEach((item) => {
-      if (item.date && item.date.getTime() < cutoff) return;
+      // Some feeds carry scheduled items far in the future; small offsets are clock or zone errors.
+      const time = item.date?.getTime() ?? 0;
+      if (time && (time < cutoff || time > now + 24 * 3600000)) return;
+      const date = time > now ? new Date(now) : item.date;
       const article = {
         ...item,
+        date,
         source: source.name,
         sourceId: source.id,
         cat: source.cat,
         publisher: item.publisher || source.name.split(' · ')[0],
         viaGoogle: Boolean(source.search),
-        sortTime: item.date ? item.date.getTime() : 0,
+        sortTime: date ? date.getTime() : 0,
       };
       article.searchText = `${article.title} ${article.desc} ${article.publisher}`.toLowerCase();
       Object.assign(article, locality(article, match));
