@@ -10,20 +10,29 @@ const BASE_SOURCES = [
   { id: 'nb-franken', name: 'nordbayern · Franken', url: 'https://www.nordbayern.de/franken?isRss=true', cat: 'regional' },
   { id: 'n-land', name: 'N-Land · Nürnberger Land', url: 'https://www.n-land.de/rss', cat: 'regional', kreis: 'Landkreis Nürnberger Land' },
   { id: 'franken-tv', name: 'Franken Fernsehen', url: 'https://www.frankenfernsehen.tv/feed/', cat: 'regional' },
+  { id: 'radio-f', name: 'Radio F', url: 'https://www.radiof.de/feed/', cat: 'regional' },
   { id: 'gn-mittelfranken', name: 'Google News · Mittelfranken', search: 'Mittelfranken', days: 3, cat: 'regional' },
+  { id: 'gn-metropolregion', name: 'Google News · Metropolregion Nürnberg', search: '"Metropolregion Nürnberg"', days: 7, cat: 'regional' },
   // Blaulicht
   { id: 'nb-polizei', name: 'nordbayern · Polizeiberichte', url: 'https://www.nordbayern.de/polizeiberichte?isRss=true', cat: 'blaulicht' },
   { id: 'gn-polizei', name: 'Google News · Polizei Mittelfranken', search: 'Polizei Mittelfranken', days: 2, cat: 'blaulicht' },
   // Sport
+  { id: 'nb-sport', name: 'nordbayern · Sport', url: 'https://www.nordbayern.de/sport?isRss=true', cat: 'sport' },
   { id: 'nb-fcn', name: 'nordbayern · 1. FC Nürnberg', url: 'https://www.nordbayern.de/sport/1-fc-nuernberg?isRss=true', cat: 'sport' },
+  { id: 'kicker-fcn', name: 'kicker · 1. FC Nürnberg', url: 'https://newsfeed.kicker.de/team/1-fc-nuernberg', cat: 'sport' },
   { id: 'gn-kleeblatt', name: 'Google News · Greuther Fürth', search: '"Greuther Fürth"', days: 3, cat: 'sport' },
   { id: 'gn-icetigers', name: 'Google News · Ice Tigers', search: '"Ice Tigers"', days: 3, cat: 'sport' },
+  { id: 'gn-hc-erlangen', name: 'Google News · HC Erlangen', search: '"HC Erlangen"', days: 3, cat: 'sport' },
+  { id: 'gn-falcons', name: 'Google News · Nürnberg Falcons', search: '"Nürnberg Falcons"', days: 7, cat: 'sport' },
   // Bayern
   { id: 'br-bayern', name: 'tagesschau · Bayern', url: 'https://www.tagesschau.de/inland/regional/bayern/index~rss2.xml', cat: 'bayern' },
+  { id: 'nb-bayern', name: 'nordbayern · Bayern', url: 'https://www.nordbayern.de/bayern?isRss=true', cat: 'bayern' },
   { id: 'sz-bayern', name: 'SZ · Bayern', url: 'https://rss.sueddeutsche.de/rss/Bayern', cat: 'bayern' },
   { id: 'merkur-bayern', name: 'Merkur · Bayern', url: 'https://www.merkur.de/bayern/rssfeed.rdf', cat: 'bayern' },
+  { id: 'aa-bayern', name: 'Augsburger Allgemeine · Bayern', url: 'https://www.augsburger-allgemeine.de/bayern/rss', cat: 'bayern' },
   // Deutschland & Welt
   { id: 'tagesschau', name: 'Tagesschau', url: 'https://www.tagesschau.de/index~rss2.xml', cat: 'allgemein' },
+  { id: 'zdf', name: 'ZDFheute', url: 'https://www.zdf.de/rss/zdf/nachrichten', cat: 'allgemein' },
   { id: 'spiegel', name: 'Spiegel', url: 'https://www.spiegel.de/schlagzeilen/index.rss', cat: 'allgemein' },
   { id: 'zeit', name: 'ZEIT Online', url: 'https://newsfeed.zeit.de/index', cat: 'allgemein' },
   { id: 'sz', name: 'Süddeutsche', url: 'https://rss.sueddeutsche.de/rss/Topthemen', cat: 'allgemein' },
@@ -36,11 +45,17 @@ const BASE_SOURCES = [
   { id: 'stern', name: 'Stern', url: 'https://www.stern.de/feed/standard/all/', cat: 'allgemein' },
   { id: 'focus', name: 'Focus', url: 'https://www.focus.de/rss', cat: 'allgemein' },
   { id: 'dlf', name: 'Deutschlandfunk', url: 'https://www.deutschlandfunk.de/nachrichten-100.rss', cat: 'allgemein' },
+  { id: 'rnd', name: 'RND', url: 'https://www.rnd.de/arc/outboundfeeds/rss/', cat: 'allgemein' },
   // Wirtschaft
+  { id: 'gn-wirtschaft-mfr', name: 'Google News · Wirtschaft Mittelfranken', search: 'Wirtschaft Mittelfranken', days: 7, cat: 'wirtschaft' },
+  { id: 'ts-wirtschaft', name: 'tagesschau · Wirtschaft', url: 'https://www.tagesschau.de/wirtschaft/index~rss2.xml', cat: 'wirtschaft' },
   { id: 'handelsblatt', name: 'Handelsblatt', url: 'https://www.handelsblatt.com/contentexport/feed/top-themen', cat: 'wirtschaft' },
+  { id: 'wiwo', name: 'WirtschaftsWoche', url: 'https://www.wiwo.de/contentexport/feed/rss/schlagzeilen', cat: 'wirtschaft' },
   { id: 'manager', name: 'Manager Magazin', url: 'https://www.manager-magazin.de/news/index.rss', cat: 'wirtschaft' },
   // Technik
   { id: 'heise', name: 'Heise', url: 'https://www.heise.de/rss/heise-atom.xml', cat: 'tech' },
+  { id: 'computerbase', name: 'ComputerBase', url: 'https://www.computerbase.de/rss/news.xml', cat: 'tech' },
+  { id: 'caschy', name: 'Caschys Blog', url: 'https://stadt-bremerhaven.de/feed/', cat: 'tech' },
   { id: 'heisesec', name: 'Heise Security', url: 'https://www.heise.de/security/rss/news-atom.xml', cat: 'tech' },
   { id: 'golem', name: 'Golem', url: 'https://rss.golem.de/rss.php?feed=RSS2.0', cat: 'tech' },
   { id: 't3n', name: 't3n', url: 'https://t3n.de/rss.xml', cat: 'tech' },
@@ -593,7 +608,8 @@ function mergeDuplicates(articles) {
 
 function rebuildArticles() {
   const match = Region.matcher(state.place);
-  const cutoff = Date.now() - MAX_AGE_MS;
+  const now = Date.now();
+  const cutoff = now - MAX_AGE_MS;
   const articles = [];
   state.sourceStats = {};
   state.sources.forEach((source) => {

@@ -8,7 +8,8 @@ Desktop-App (Electron) für lokale Nachrichten: zuerst dein Ort, dann Mittelfran
 
 - **Mein Ort:** über 40 Orte in Mittelfranken (kreisfreie Städte und alle sieben Landkreise), dazu freie Eingabe für jeden anderen Ort
 - **Startseite wie eine Zeitung:** Aufmacher, „Top in der Region“, Rubriken für Ort, Mittelfranken, Blaulicht, Sport, Bayern, Deutschland & Welt, Wirtschaft, Technik
-- Regionale Quellen: nordbayern.de (Nürnberg, Fürth, Erlangen, Franken, Polizeiberichte, 1. FC Nürnberg), N-Land, Franken Fernsehen, BR/tagesschau Bayern, SZ Bayern, Merkur Bayern, Google News für Ort, Landkreis, Greuther Fürth und Ice Tigers
+- Regionale Quellen: nordbayern.de (Nürnberg, Fürth, Erlangen, Franken, Bayern, Polizeiberichte, Sport, 1. FC Nürnberg), N-Land, Franken Fernsehen, Radio F, kicker (1. FC Nürnberg), BR/tagesschau Bayern, SZ Bayern, Merkur Bayern, Augsburger Allgemeine Bayern, Google News für Ort, Landkreis, Metropolregion, Wirtschaft in Mittelfranken, Greuther Fürth, Ice Tigers, HC Erlangen und Nürnberg Falcons
+- Überregional: u. a. Tagesschau, ZDFheute, Spiegel, ZEIT, SZ, RND, Deutschlandfunk; Wirtschaft (tagesschau, Handelsblatt, WirtschaftsWoche, Manager Magazin) und Technik (Heise, Golem, t3n, ComputerBase, Caschys Blog, Netzpolitik)
 - Personalisierung: Themen, Stichwörter und „Mehr/Weniger davon“ pro Quelle, nur lokal gespeichert
 - „Gute Nachrichten“-Modus, Suche (Strg + K), Karten- und Listenansicht, Hell/Dunkel
 - Kurzfassungen: lokal (extraktiv, ohne Cloud) oder mit Claude Haiku 5.5, wenn ein API-Schlüssel hinterlegt ist
