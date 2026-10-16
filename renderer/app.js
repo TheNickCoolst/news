@@ -10,20 +10,29 @@ const BASE_SOURCES = [
   { id: 'nb-franken', name: 'nordbayern · Franken', url: 'https://www.nordbayern.de/franken?isRss=true', cat: 'regional' },
   { id: 'n-land', name: 'N-Land · Nürnberger Land', url: 'https://www.n-land.de/rss', cat: 'regional', kreis: 'Landkreis Nürnberger Land' },
   { id: 'franken-tv', name: 'Franken Fernsehen', url: 'https://www.frankenfernsehen.tv/feed/', cat: 'regional' },
+  { id: 'radio-f', name: 'Radio F', url: 'https://www.radiof.de/feed/', cat: 'regional' },
   { id: 'gn-mittelfranken', name: 'Google News · Mittelfranken', search: 'Mittelfranken', days: 3, cat: 'regional' },
+  { id: 'gn-metropolregion', name: 'Google News · Metropolregion Nürnberg', search: '"Metropolregion Nürnberg"', days: 7, cat: 'regional' },
   // Blaulicht
   { id: 'nb-polizei', name: 'nordbayern · Polizeiberichte', url: 'https://www.nordbayern.de/polizeiberichte?isRss=true', cat: 'blaulicht' },
   { id: 'gn-polizei', name: 'Google News · Polizei Mittelfranken', search: 'Polizei Mittelfranken', days: 2, cat: 'blaulicht' },
   // Sport
+  { id: 'nb-sport', name: 'nordbayern · Sport', url: 'https://www.nordbayern.de/sport?isRss=true', cat: 'sport' },
   { id: 'nb-fcn', name: 'nordbayern · 1. FC Nürnberg', url: 'https://www.nordbayern.de/sport/1-fc-nuernberg?isRss=true', cat: 'sport' },
+  { id: 'kicker-fcn', name: 'kicker · 1. FC Nürnberg', url: 'https://newsfeed.kicker.de/team/1-fc-nuernberg', cat: 'sport' },
   { id: 'gn-kleeblatt', name: 'Google News · Greuther Fürth', search: '"Greuther Fürth"', days: 3, cat: 'sport' },
   { id: 'gn-icetigers', name: 'Google News · Ice Tigers', search: '"Ice Tigers"', days: 3, cat: 'sport' },
+  { id: 'gn-hc-erlangen', name: 'Google News · HC Erlangen', search: '"HC Erlangen"', days: 3, cat: 'sport' },
+  { id: 'gn-falcons', name: 'Google News · Nürnberg Falcons', search: '"Nürnberg Falcons"', days: 7, cat: 'sport' },
   // Bayern
   { id: 'br-bayern', name: 'tagesschau · Bayern', url: 'https://www.tagesschau.de/inland/regional/bayern/index~rss2.xml', cat: 'bayern' },
+  { id: 'nb-bayern', name: 'nordbayern · Bayern', url: 'https://www.nordbayern.de/bayern?isRss=true', cat: 'bayern' },
   { id: 'sz-bayern', name: 'SZ · Bayern', url: 'https://rss.sueddeutsche.de/rss/Bayern', cat: 'bayern' },
   { id: 'merkur-bayern', name: 'Merkur · Bayern', url: 'https://www.merkur.de/bayern/rssfeed.rdf', cat: 'bayern' },
+  { id: 'aa-bayern', name: 'Augsburger Allgemeine · Bayern', url: 'https://www.augsburger-allgemeine.de/bayern/rss', cat: 'bayern' },
   // Deutschland & Welt
   { id: 'tagesschau', name: 'Tagesschau', url: 'https://www.tagesschau.de/index~rss2.xml', cat: 'allgemein' },
+  { id: 'zdf', name: 'ZDFheute', url: 'https://www.zdf.de/rss/zdf/nachrichten', cat: 'allgemein' },
   { id: 'spiegel', name: 'Spiegel', url: 'https://www.spiegel.de/schlagzeilen/index.rss', cat: 'allgemein' },
   { id: 'zeit', name: 'ZEIT Online', url: 'https://newsfeed.zeit.de/index', cat: 'allgemein' },
   { id: 'sz', name: 'Süddeutsche', url: 'https://rss.sueddeutsche.de/rss/Topthemen', cat: 'allgemein' },
@@ -36,11 +45,17 @@ const BASE_SOURCES = [
   { id: 'stern', name: 'Stern', url: 'https://www.stern.de/feed/standard/all/', cat: 'allgemein' },
   { id: 'focus', name: 'Focus', url: 'https://www.focus.de/rss', cat: 'allgemein' },
   { id: 'dlf', name: 'Deutschlandfunk', url: 'https://www.deutschlandfunk.de/nachrichten-100.rss', cat: 'allgemein' },
+  { id: 'rnd', name: 'RND', url: 'https://www.rnd.de/arc/outboundfeeds/rss/', cat: 'allgemein' },
   // Wirtschaft
+  { id: 'gn-wirtschaft-mfr', name: 'Google News · Wirtschaft Mittelfranken', search: 'Wirtschaft Mittelfranken', days: 7, cat: 'wirtschaft' },
+  { id: 'ts-wirtschaft', name: 'tagesschau · Wirtschaft', url: 'https://www.tagesschau.de/wirtschaft/index~rss2.xml', cat: 'wirtschaft' },
   { id: 'handelsblatt', name: 'Handelsblatt', url: 'https://www.handelsblatt.com/contentexport/feed/top-themen', cat: 'wirtschaft' },
+  { id: 'wiwo', name: 'WirtschaftsWoche', url: 'https://www.wiwo.de/contentexport/feed/rss/schlagzeilen', cat: 'wirtschaft' },
   { id: 'manager', name: 'Manager Magazin', url: 'https://www.manager-magazin.de/news/index.rss', cat: 'wirtschaft' },
   // Technik
   { id: 'heise', name: 'Heise', url: 'https://www.heise.de/rss/heise-atom.xml', cat: 'tech' },
+  { id: 'computerbase', name: 'ComputerBase', url: 'https://www.computerbase.de/rss/news.xml', cat: 'tech' },
+  { id: 'caschy', name: 'Caschys Blog', url: 'https://stadt-bremerhaven.de/feed/', cat: 'tech' },
   { id: 'heisesec', name: 'Heise Security', url: 'https://www.heise.de/security/rss/news-atom.xml', cat: 'tech' },
   { id: 'golem', name: 'Golem', url: 'https://rss.golem.de/rss.php?feed=RSS2.0', cat: 'tech' },
   { id: 't3n', name: 't3n', url: 'https://t3n.de/rss.xml', cat: 'tech' },
@@ -107,6 +122,7 @@ const state = {
   geoSuggestion: null,
   registry: [],
   profile: Personalization.load(),
+  ai: { available: false, model: '' },
 };
 
 // ───────────────────────────────────────────────────────────────
@@ -592,7 +608,8 @@ function mergeDuplicates(articles) {
 
 function rebuildArticles() {
   const match = Region.matcher(state.place);
-  const cutoff = Date.now() - MAX_AGE_MS;
+  const now = Date.now();
+  const cutoff = now - MAX_AGE_MS;
   const articles = [];
   state.sourceStats = {};
   state.sources.forEach((source) => {
@@ -600,15 +617,19 @@ function rebuildArticles() {
     if (!entry) return;
     state.sourceStats[source.id] = { count: entry.items.length, error: entry.error };
     entry.items.forEach((item) => {
-      if (item.date && item.date.getTime() < cutoff) return;
+      // Some feeds carry scheduled items far in the future; small offsets are clock or zone errors.
+      const time = item.date?.getTime() ?? 0;
+      if (time && (time < cutoff || time > now + 24 * 3600000)) return;
+      const date = time > now ? new Date(now) : item.date;
       const article = {
         ...item,
+        date,
         source: source.name,
         sourceId: source.id,
         cat: source.cat,
         publisher: item.publisher || source.name.split(' · ')[0],
         viaGoogle: Boolean(source.search),
-        sortTime: item.date ? item.date.getTime() : 0,
+        sortTime: date ? date.getTime() : 0,
       };
       article.searchText = `${article.title} ${article.desc} ${article.publisher}`.toLowerCase();
       Object.assign(article, locality(article, match));
@@ -1246,13 +1267,27 @@ async function createSummary(article) {
   if (!baseText || baseText.length < 50) return null;
 
   const result = {
-    summary: summarize(baseText, 4),
+    summary: '',
     fetchedFull,
     sourceLength: baseText.length,
     createdAt: Date.now(),
   };
-  summaryCache[article.link] = result;
-  saveSummaryCache();
+  if (state.ai.available) {
+    const res = await api.summarizeAi({ title: article.title, text: baseText });
+    if (res.ok && !res.summary) return null;
+    if (res.ok) {
+      result.summary = res.summary;
+      result.model = res.model;
+    } else {
+      result.aiError = res.error;
+    }
+  }
+  result.summary ||= summarize(baseText, 4);
+  // A local fallback is not cached, so the next attempt asks Claude again.
+  if (!result.aiError) {
+    summaryCache[article.link] = result;
+    saveSummaryCache();
+  }
   return result;
 }
 
@@ -1261,8 +1296,11 @@ async function openSummary(article, trigger = null) {
   summaryArticle = article;
   dom.summaryTitle.textContent = article.title;
   dom.summarySource.textContent = [article.publisher, relativeTime(article.date)].filter(Boolean).join(' · ');
+  const where = state.ai.available
+    ? `Der Text dieser Meldung geht zur Auswertung an ${state.ai.model} (Anthropic).`
+    : 'Nur diese Meldung wird lokal auf deinem Gerät ausgewertet.';
   dom.summaryBody.innerHTML = `<div class="summary-loading" aria-live="polite">${icon('sparkle')}
-    <div><strong>Kurzfassung wird erstellt …</strong><p class="muted">Nur diese Meldung wird lokal auf deinem Gerät ausgewertet.</p></div></div>`;
+    <div><strong>Kurzfassung wird erstellt …</strong><p class="muted">${escapeHtml(where)}</p></div></div>`;
   if (!dom.summaryDialog.open) dom.summaryDialog.showModal();
   if (trigger) {
     trigger.classList.add('summarizing');
@@ -1288,9 +1326,9 @@ function showSummary(result, article, justGenerated) {
       <div class="summary-actions">${openButton}</div>`;
     return;
   }
-  const meta = result.fetchedFull
-    ? `Lokal erstellt aus dem Volltext (${result.sourceLength} Zeichen)`
-    : `Lokal erstellt aus der Feed-Beschreibung (${result.sourceLength} Zeichen)`;
+  const origin = result.fetchedFull ? 'dem Volltext' : 'der Feed-Beschreibung';
+  const meta = `${result.model ? `Von ${result.model} erstellt` : 'Lokal erstellt'} aus ${origin} (${result.sourceLength} Zeichen)`
+    + (result.aiError ? `, Claude nicht verfügbar: ${result.aiError}` : '');
   const age = justGenerated ? 'gerade eben' : `aus dem Zwischenspeicher, ${relativeTime(new Date(result.createdAt))}`;
   dom.summaryBody.innerHTML = `
     <p class="summary-text">${escapeHtml(result.summary)}</p>
@@ -1604,6 +1642,9 @@ function initEvents() {
 
 bindDom();
 state.sources = buildSources(state.place);
+api.aiStatus().then((status) => {
+  state.ai = status;
+});
 initEvents();
 renderAll();
 loadAll();
